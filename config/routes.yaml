@@ -1,0 +1,28 @@
+index:
+    path: /
+    controller: App\Controller\DefaultController
+
+api_get_symbols:
+    path: /api/symbols
+    controller: App\Controller\SymbolsController
+    methods: GET
+
+api_create_transaction:
+    path: /api/transaction
+    controller: App\Controller\TransactionCreateController
+    methods: POST
+
+api_list_transactions:
+    path: /api/transaction
+    controller: App\Controller\TransactionListController
+    methods: GET
+
+api_edit_transactions:
+    path: /api/transaction/{id}
+    controller: App\Controller\TransactionEditController
+    methods: PUT
+
+api_delete_transactions:
+    path: /api/transaction/{id}
+    controller: App\Controller\TransactionDeleteController
+    methods: DELETE
