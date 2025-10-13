@@ -23,7 +23,7 @@ class Material extends AbstractEntity
      * @ORM\Column(type="string", length=64)
      */
     protected $kod;
-    
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -33,12 +33,12 @@ class Material extends AbstractEntity
      * @ORM\ManyToOne(targetEntity="Grupa", cascade={"all"}, fetch="EAGER")
      */
     protected $grupa;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Jednostka", cascade={"all"}, fetch="EAGER")
      */
     protected $jednostka;
-    
+
     /**
      * @ORM\Column(type="decimal", precision=20, scale=2)
      */

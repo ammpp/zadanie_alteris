@@ -16,12 +16,12 @@ class Grupa extends AbstractEntity
      * @ORM\Column(type="integer")
      */
     protected $id;
-   
+
     /**
      * @ORM\ManyToOne(targetEntity="Grupa", cascade={"all"}, fetch="EAGER")
      */
     protected $parent;
-    
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -43,16 +43,16 @@ class Grupa extends AbstractEntity
 
         return $this;
     }
-    
+
     public function getParent(): Grupa
     {
         return $this->parent;
     }
-    
+
     public function setParent(Grupa $parent): self
     {
         $this->parent = $parent;
-        
+
         return $this;
     }
 }

@@ -2,14 +2,19 @@ index:
     path: /
     controller: App\Controller\DefaultController
 
-api_get_symbols:
-    path: /api/symbols
-    controller: App\Controller\SymbolsController
+api_get_material:
+    path: /api/material
+    controller: App\Controller\MaterialListController
     methods: GET
 
-api_create_transaction:
-    path: /api/transaction
-    controller: App\Controller\TransactionCreateController
+api_get_jednostka:
+    path: /api/jednostka
+    controller: App\Controller\JednostkaListController
+    methods: GET
+
+api_create_jednostka:
+    path: /api/jednostka
+    controller: App\Controller\JednostkaCreateController
     methods: POST
 
 api_list_transactions:
