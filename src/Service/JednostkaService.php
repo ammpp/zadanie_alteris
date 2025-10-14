@@ -33,11 +33,9 @@ class JednostkaService
             case !$nazwa:
                 $this->errorMessage = 'Brak nazwy';
                 return null;
-        }
-
-        if ($this->checkExists($skrot, $nazwa)) {
-            $this->errorMessage = 'Jednostka istnieje';
-            return null;
+            case $this->checkExists($skrot, $nazwa):
+                $this->errorMessage = 'Jednostka istnieje';
+                return null;
         }
 
         $jednostka = (new Jednostka())
@@ -49,6 +47,47 @@ class JednostkaService
         return $jednostka;
     }
 
+    public function editJednostka(
+        int $id,
+        string $skrot,
+        string $nazwa
+    ): ?Jednostka {
+        switch (true) {
+            case !$id:
+                $this->errorMessage = 'Brak identyfikatora';
+                return null;
+            case $this->checkExists($skrot, $nazwa, $id):
+                $this->errorMessage = 'Jednostka istnieje';
+                return null;
+        }
+
+        $jednostka = $this->jednostkaRepository->find($id);
+
+        if ($jednostka) {
+            $jednostka
+                ->setSkrot($skrot)
+                ->setNazwa($nazwa);
+
+            $this->jednostkaRepository->save($jednostka);
+            return $jednostka;
+        }
+
+        $this->errorMessage = 'Jednostka nie istnieje';
+        return null;
+    }
+
+    public function deleteJednostka(int $id): bool
+    {
+        $jednostka = $this->jednostkaRepository->find($id);
+
+        if ($jednostka) {
+            $this->jednostkaRepository->remove($jednostka);
+            return true;
+        }
+
+        return false;
+    }
+
     public function getErrorMessage(): string
     {
         return $this->errorMessage;
@@ -56,12 +95,18 @@ class JednostkaService
 
     private function checkExists(
         string $skrot,
-        string $nazwa
+        string $nazwa,
+        int $id = 0
     ): bool {
         $criteria = new Criteria();
         $criteria
-            ->orWhere($criteria->expr()->eq('skrot', $skrot))
-            ->orWhere($criteria->expr()->eq('nazwa', $nazwa));
+            ->where(
+                $criteria
+                    ->where($criteria->expr()->eq('skrot', $skrot))
+                    ->orWhere($criteria->expr()->eq('nazwa', $nazwa))
+                    ->getWhereExpression()
+            )
+            ->andWhere($criteria->expr()->neq('id', $id));
         return (bool)$this->jednostkaRepository->matching($criteria)->count();
     }
 }
