@@ -2,27 +2,27 @@ index:
     path: /
     controller: App\Controller\DefaultController
 
-api_get_symbols:
-    path: /api/symbols
-    controller: App\Controller\SymbolsController
+api_list_material:
+    path: /api/material
+    controller: App\Controller\MaterialListController
     methods: GET
 
-api_create_transaction:
-    path: /api/transaction
-    controller: App\Controller\TransactionCreateController
+api_list_jednostka:
+    path: /api/jednostka
+    controller: App\Controller\JednostkaListController
+    methods: GET
+
+api_create_jednostka:
+    path: /api/jednostka
+    controller: App\Controller\JednostkaCreateController
     methods: POST
 
-api_list_transactions:
-    path: /api/transaction
-    controller: App\Controller\TransactionListController
-    methods: GET
-
-api_edit_transactions:
-    path: /api/transaction/{id}
-    controller: App\Controller\TransactionEditController
+api_edit_jednostka:
+    path: /api/jednostka/{id}
+    controller: App\Controller\JednostkaEditController
     methods: PUT
 
-api_delete_transactions:
-    path: /api/transaction/{id}
-    controller: App\Controller\TransactionDeleteController
+api_delete_jednostka:
+    path: /api/jednostka/{id}
+    controller: App\Controller\JednostkaDeleteController
     methods: DELETE

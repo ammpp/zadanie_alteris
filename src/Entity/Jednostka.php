@@ -21,7 +21,7 @@ class Jednostka extends AbstractEntity
      * @ORM\Column(type="string", length=64)
      */
     protected $skrot;
-    
+
     /**
      * @ORM\Column(type="string", length=255)
      */
