@@ -21,7 +21,7 @@ class Jednostka extends AbstractEntity
      * @ORM\Column(type="string", length=64)
      */
     protected $skrot;
-    
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -37,7 +37,7 @@ class Jednostka extends AbstractEntity
         return $this->skrot;
     }
 
-    public function setSkrot(string $skrot): Jednostka
+    public function setSkrot(string $skrot): self
     {
         $this->skrot = $skrot;
 
@@ -49,7 +49,7 @@ class Jednostka extends AbstractEntity
         return $this->nazwa;
     }
 
-    public function setNazwa(string $nazwa): Jednostka
+    public function setNazwa(string $nazwa): self
     {
         $this->nazwa = $nazwa;
 
