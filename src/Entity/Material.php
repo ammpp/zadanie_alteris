@@ -30,12 +30,12 @@ class Material extends AbstractEntity
     protected $nazwa;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Grupa", cascade={"all"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Grupa", fetch="EAGER")
      */
     protected $grupa;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Jednostka", cascade={"all"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Jednostka", fetch="EAGER")
      */
     protected $jednostka;
 

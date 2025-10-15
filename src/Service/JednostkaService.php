@@ -56,6 +56,12 @@ class JednostkaService
             case !$id:
                 $this->errorMessage = 'Brak identyfikatora';
                 return null;
+            case !$skrot:
+                $this->errorMessage = 'Brak skrotu';
+                return null;
+            case !$nazwa:
+                $this->errorMessage = 'Brak nazwy';
+                return null;
             case $this->checkExists($skrot, $nazwa, $id):
                 $this->errorMessage = 'Jednostka istnieje';
                 return null;
