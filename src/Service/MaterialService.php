@@ -6,28 +6,20 @@ use App\Entity\Material;
 
 class MaterialService
 {
-	private ApiClient $client;
-
-	private ExchangeCache $cache;
-
-	private MaterialRepository $transactionsRepository;
+	private MaterialRepository $materialRepository;
 
 	public function __construct
 	(
-		ApiClient $client,
-		ExchangeCache $cache,
-	    MaterialRepository $transactionsRepository
+	    MaterialRepository $materialRepository
 	) {
-		$this->client = $client;
-		$this->cache = $cache;
-		$this->transactionsRepository = $transactionsRepository;
+		$this->materialRepository = $materialRepository;
 	}
 
-	public function getTransactions(?int $limit = 20, ?int $offset = 0)
+	public function getMaterials(?int $limit = 100, ?int $offset = 0)
 	{
-		return $this->transactionsRepository->findBy([], ['timestamp' => 'ASC'], $limit, $offset);
+	    return $this->materialRepository->findBy([], ['id' => 'ASC'], $limit, $offset);
 	}
-
+/*
 	public function createTransaction(
 		string $method,
 		bool $isDeposit,
@@ -62,7 +54,7 @@ class MaterialService
 
 	public function editTransaction(int $id, string $targetCurrency): ?Transactions
 	{
-		/** @var Transactions $transaction */
+		/** @var Transactions $transaction * /
 		$transaction = $this->transactionsRepository->find($id);
 
 		if ($transaction) {
@@ -90,7 +82,7 @@ class MaterialService
 
 	public function deleteTransaction(int $id): bool
 	{
-		/** @var Transactions $transaction */
+		/** @var Transactions $transaction * /
 		$transaction = $this->transactionsRepository->find($id);
 
 		if ($transaction) {
@@ -111,4 +103,5 @@ class MaterialService
 				$this->client->getExchange($baseCurrency, $targetCurrency)
 			);
 	}
+	*/
 }
