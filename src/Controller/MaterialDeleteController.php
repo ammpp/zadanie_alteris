@@ -1,29 +1,29 @@
 <?php
 namespace App\Controller;
 
-use App\Service\JednostkaService;
+use App\Service\MaterialService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class JednostkaDeleteController extends AbstractController
+class MaterialDeleteController extends AbstractController
 {
-    private JednostkaService $jednostkaService;
+    private MaterialService $materialService;
 
-    public function __construct(JednostkaService $jednostkaService)
+    public function __construct(MaterialService $materialService)
     {
-        $this->jednostkaService = $jednostkaService;
+        $this->materialService = $materialService;
     }
 
 	public function __invoke(int $id): JsonResponse
 	{
-	    if ($this->jednostkaService->deleteJednostka($id)) {
+	    if ($this->materialService->deleteMaterial($id)) {
 			return new JsonResponse([
 				'status' => 'OK'
 			]);
 		} else {
 			return new JsonResponse([
 				'status' => 'error',
-				'message' => 'Brak jednostki'
+			    'message' => $this->materialService->getErrorMessage()
 			], JsonResponse::HTTP_NOT_FOUND);
 		}
 	}

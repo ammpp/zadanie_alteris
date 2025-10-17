@@ -7,8 +7,58 @@ api_list_material:
     controller: App\Controller\MaterialListController
     methods: GET
 
+api_get_material:
+    path: /api/material/{id}
+    controller: App\Controller\MaterialListController
+    methods: GET
+
+api_create_material:
+    path: /api/material
+    controller: App\Controller\MaterialCreateController
+    methods: POST
+
+api_edit_material:
+    path: /api/material/{id}
+    controller: App\Controller\MaterialEditController
+    methods: PUT
+
+api_delete_jednostka:
+    path: /api/jednostka/{id}
+    controller: App\Controller\JednostkaDeleteController
+    methods: DELETE
+
+api_list_grupa:
+    path: /api/grupa
+    controller: App\Controller\GrupaListController
+    methods: GET
+
+api_list_grupa_fragment:
+    path: /api/grupa/{id}
+    controller: App\Controller\GrupaListController
+    methods: GET
+
+api_create_grupa:
+    path: /api/grupa
+    controller: App\Controller\GrupaCreateController
+    methods: POST
+
+api_edit_grupa:
+    path: /api/grupa/{id}
+    controller: App\Controller\GrupaEditController
+    methods: PUT
+
+api_delete_grupa:
+    path: /api/grupa/{id}
+    controller: App\Controller\GrupaDeleteController
+    methods: DELETE
+
 api_list_jednostka:
     path: /api/jednostka
+    controller: App\Controller\JednostkaListController
+    methods: GET
+
+api_get_jednostka:
+    path: /api/jednostka/{id}
     controller: App\Controller\JednostkaListController
     methods: GET
 
