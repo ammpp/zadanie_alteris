@@ -18,7 +18,7 @@ class Grupa extends AbstractEntity
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Grupa", cascade={"all"}, fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Grupa", fetch="EAGER")
      */
     protected $parent;
 
@@ -37,19 +37,19 @@ class Grupa extends AbstractEntity
         return $this->nazwa;
     }
 
-    public function setNazwa(string $nazwa): Grupa
+    public function setNazwa(string $nazwa): self
     {
         $this->nazwa = $nazwa;
 
         return $this;
     }
 
-    public function getParent(): Grupa
+    public function getParent(): ?Grupa
     {
         return $this->parent;
     }
 
-    public function setParent(Grupa $parent): self
+    public function setParent(?Grupa $parent): self
     {
         $this->parent = $parent;
 

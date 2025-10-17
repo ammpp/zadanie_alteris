@@ -1,29 +1,29 @@
 <?php
 namespace App\Controller;
 
-use App\Service\JednostkaService;
+use App\Service\GrupaService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class JednostkaDeleteController extends AbstractController
+class GrupaDeleteController extends AbstractController
 {
-    private JednostkaService $jednostkaService;
+    private GrupaService $grupaService;
 
-    public function __construct(JednostkaService $jednostkaService)
+    public function __construct(GrupaService $grupaService)
     {
-        $this->jednostkaService = $jednostkaService;
+        $this->grupaService = $grupaService;
     }
 
 	public function __invoke(int $id): JsonResponse
 	{
-	    if ($this->jednostkaService->deleteJednostka($id)) {
+	    if ($this->grupaService->deleteGrupa($id)) {
 			return new JsonResponse([
 				'status' => 'OK'
 			]);
 		} else {
 			return new JsonResponse([
 				'status' => 'error',
-				'message' => 'Brak jednostki'
+			    'message' => $this->grupaService->getErrorMessage()
 			], JsonResponse::HTTP_NOT_FOUND);
 		}
 	}

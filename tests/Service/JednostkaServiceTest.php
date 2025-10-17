@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Tests\Service;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -80,7 +79,7 @@ class JednostkaServiceTest extends WebTestCase
         self::assertEquals($jednostkaService->getErrorMessage(), 'Jednostka istnieje');
     }
 
-    public function testUnableToCreateJednostkaBecauseWrongDatas(): void
+    public function testUnableToCreateJednostkaBecauseWrongData(): void
     {
         $skrot = 'N';
         $nazwa = '';

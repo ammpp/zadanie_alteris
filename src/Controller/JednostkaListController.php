@@ -20,7 +20,7 @@ class JednostkaListController extends AbstractController
 	public function __invoke(): JsonResponse
 	{
 	    return new JsonResponse(
-	        $this->serializer->serialize($this->jednostkaService->getJednostki(), 'json')
+	        $this->serializer->serialize($this->jednostkaService->getJednostki(), 'json'), 200, [], true
 	    );
 	}
 }
