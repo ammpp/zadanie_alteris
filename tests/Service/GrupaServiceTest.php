@@ -7,10 +7,12 @@ use App\Repository\GrupaRepository;
 use App\Entity\Grupa;
 use App\Tests\Mock\GrupaMock;
 use Doctrine\Common\Collections\Collection;
+use App\Repository\MaterialRepository;
 
 class GrupaServiceTest extends WebTestCase
 {
     private GrupaRepository $grupaRepository;
+    private MaterialRepository $materialRepository;
 
     public function setUp(): void
     {
@@ -21,11 +23,12 @@ class GrupaServiceTest extends WebTestCase
         $this->grupaRepository
             ->method('findAll')
             ->willReturn([$grupa1, $grupa2, $grupa3]);
+        $this->materialRepository = $this->createMock(MaterialRepository::class);
     }
 
     public function testListGrupa(): void
     {
-        $grupaService = new GrupaService($this->grupaRepository);
+        $grupaService = new GrupaService($this->grupaRepository, $this->materialRepository);
         $list = $grupaService->getGrupy();
 
         self::assertEquals($list, [
@@ -67,7 +70,7 @@ class GrupaServiceTest extends WebTestCase
             ->method('matching')
             ->willReturn($dbResponse);
 
-        $grupaService = new GrupaService($this->grupaRepository);
+        $grupaService = new GrupaService($this->grupaRepository, $this->materialRepository);
         $response = $grupaService->createGrupa(0, $nazwa);
 
         self::assertEquals($response, $grupa4);
@@ -90,7 +93,7 @@ class GrupaServiceTest extends WebTestCase
             ->method('matching')
             ->willReturn($dbResponse);
 
-        $grupaService = new GrupaService($this->grupaRepository);
+        $grupaService = new GrupaService($this->grupaRepository, $this->materialRepository);
         $response = $grupaService->createGrupa(0, $nazwa);
 
         self::assertEquals($response, null);
@@ -112,7 +115,7 @@ class GrupaServiceTest extends WebTestCase
             ->method('matching')
             ->willReturn($dbResponse);
 
-        $grupaService = new GrupaService($this->grupaRepository);
+        $grupaService = new GrupaService($this->grupaRepository, $this->materialRepository);
         $response = $grupaService->createGrupa(0, $nazwa);
 
         self::assertEquals($response, null);
@@ -134,7 +137,7 @@ class GrupaServiceTest extends WebTestCase
             ->method('matching')
             ->willReturn($dbResponse);
 
-        $grupaService = new GrupaService($this->grupaRepository);
+        $grupaService = new GrupaService($this->grupaRepository, $this->materialRepository);
         $response = $grupaService->createGrupa(100, $nazwa);
 
         self::assertEquals($response, null);
@@ -167,7 +170,7 @@ class GrupaServiceTest extends WebTestCase
             ->method('matching')
             ->willReturn($dbResponse);
 
-        $grupaService = new GrupaService($this->grupaRepository);
+        $grupaService = new GrupaService($this->grupaRepository, $this->materialRepository);
         $response = $grupaService->editGrupa($id, 0, $newNazwa);
 
         self::assertEquals($response, (new Grupa())->setNazwa($newNazwa));
@@ -199,7 +202,7 @@ class GrupaServiceTest extends WebTestCase
             ->method('matching')
             ->willReturn($dbResponse);
 
-        $grupaService = new GrupaService($this->grupaRepository);
+        $grupaService = new GrupaService($this->grupaRepository, $this->materialRepository);
         $response = $grupaService->editGrupa($id, 0, $newNazwa);
 
         self::assertEquals($response, null);
@@ -222,7 +225,7 @@ class GrupaServiceTest extends WebTestCase
             ->method('matching')
             ->willReturn($dbResponse);
 
-        $grupaService = new GrupaService($this->grupaRepository);
+        $grupaService = new GrupaService($this->grupaRepository, $this->materialRepository);
         $response = $grupaService->editGrupa($id, 0, $newNazwa);
 
         self::assertEquals($response, null);
@@ -256,7 +259,7 @@ class GrupaServiceTest extends WebTestCase
             ->method('matching')
             ->willReturn($dbResponse);
 
-        $grupaService = new GrupaService($this->grupaRepository);
+        $grupaService = new GrupaService($this->grupaRepository, $this->materialRepository);
         $response = $grupaService->editGrupa($id, $newParent, $nazwa);
 
         self::assertEquals($response, null);
@@ -290,7 +293,7 @@ class GrupaServiceTest extends WebTestCase
             ->method('matching')
             ->willReturn($dbResponse);
 
-        $grupaService = new GrupaService($this->grupaRepository);
+        $grupaService = new GrupaService($this->grupaRepository, $this->materialRepository);
         $response = $grupaService->editGrupa($id, $newParent, $nazwa);
 
         self::assertEquals($response, null);
@@ -313,7 +316,7 @@ class GrupaServiceTest extends WebTestCase
             ->method('remove')
             ->with($grupa);
 
-        $grupaService = new GrupaService($this->grupaRepository);
+        $grupaService = new GrupaService($this->grupaRepository, $this->materialRepository);
         $response = $grupaService->deleteGrupa($id);
 
         self::assertEquals($response, true);
@@ -332,7 +335,7 @@ class GrupaServiceTest extends WebTestCase
             ->expects($this->never())
             ->method('remove');
 
-        $grupaService = new GrupaService($this->grupaRepository);
+        $grupaService = new GrupaService($this->grupaRepository, $this->materialRepository);
         $response = $grupaService->deleteGrupa($id);
 
         self::assertEquals($response, false);
@@ -360,10 +363,42 @@ class GrupaServiceTest extends WebTestCase
             ->expects($this->never())
             ->method('remove');
 
-        $grupaService = new GrupaService($this->grupaRepository);
+        $grupaService = new GrupaService($this->grupaRepository, $this->materialRepository);
         $response = $grupaService->deleteGrupa($id);
 
         self::assertEquals($response, false);
         self::assertEquals($grupaService->getErrorMessage(), 'Grupa nie jest pusta');
+    }
+
+    public function testUnableToDeleteGrupaBecauseIsUsed(): void
+    {
+        $id = 1;
+
+        $grupa1 = (new GrupaMock())->setId(1)->setNazwa('Grupa_1');
+
+        $this->grupaRepository
+            ->expects($this->once())
+            ->method('find')
+            ->with($id)
+            ->willReturn($grupa1);
+        $this->grupaRepository
+            ->expects($this->once())
+            ->method('count')
+            ->with(['parent' => $grupa1])
+            ->willReturn(0);
+        $this->grupaRepository
+            ->expects($this->never())
+            ->method('remove');
+        $this->materialRepository
+            ->expects($this->once())
+            ->method('count')
+            ->with(['grupa' => $grupa1])
+            ->willReturn(1);
+
+        $grupaService = new GrupaService($this->grupaRepository, $this->materialRepository);
+        $response = $grupaService->deleteGrupa($id);
+
+        self::assertEquals($response, false);
+        self::assertEquals($grupaService->getErrorMessage(), 'Grupa jest uzywana');
     }
 }
