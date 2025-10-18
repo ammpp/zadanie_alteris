@@ -22,9 +22,9 @@ api_edit_material:
     controller: App\Controller\MaterialEditController
     methods: PUT
 
-api_delete_jednostka:
-    path: /api/jednostka/{id}
-    controller: App\Controller\JednostkaDeleteController
+api_delete_material:
+    path: /api/material/{id}
+    controller: App\Controller\MaterialDeleteController
     methods: DELETE
 
 api_list_grupa:

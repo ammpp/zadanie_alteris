@@ -21,12 +21,14 @@ class MaterialCreateController extends AbstractController
 	    $nazwa = $request->request->get('nazwa', '');
 	    $grupaId = $request->request->get('grupa', 0);
 	    $jednostkaId = $request->request->get('jednostka', 0);
+	    $wartosc = $request->request->get('wartosc', 0);
 
 	    $material = $this->materialService->createMaterial(
             $kod,
             $nazwa,
 	        (int)$grupaId,
-	        (int)$jednostkaId
+	        (int)$jednostkaId,
+	        $wartosc
         );
 	    if ($material) {
             return new JsonResponse(
