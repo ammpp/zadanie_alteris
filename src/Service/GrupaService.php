@@ -4,24 +4,32 @@ namespace App\Service;
 use App\Repository\GrupaRepository;
 use App\Entity\Grupa;
 use Doctrine\Common\Collections\Criteria;
+use App\Repository\MaterialRepository;
 
-class GrupaService
+class GrupaService extends AbstractService
 {
     private GrupaRepository $grupaRepository;
-    private string $errorMessage = '';
+    private MaterialRepository $materialRepository;
     private array $groupTree = [];
 
     public function __construct
     (
-        GrupaRepository $grupaRepository
+        GrupaRepository $grupaRepository,
+        MaterialRepository $materialRepository
     ) {
         $this->grupaRepository = $grupaRepository;
+        $this->materialRepository = $materialRepository;
     }
 
     public function getGrupy(int $base = 0)
     {
         $this->getTree();
         return $this->addChildren($base);
+    }
+
+    public function getGrupa(int $id): ?Grupa
+    {
+        return $this->grupaRepository->find($id);
     }
 
     public function createGrupa(
@@ -110,6 +118,11 @@ class GrupaService
             return false;
         }
 
+        if ($this->materialRepository->count(['grupa' => $grupa])) {
+            $this->errorMessage = 'Grupa jest uzywana';
+            return false;
+        }
+
         if ($grupa) {
             $this->grupaRepository->remove($grupa);
             return true;
@@ -117,11 +130,6 @@ class GrupaService
 
         $this->errorMessage = 'Brak grupy';
         return false;
-    }
-
-    public function getErrorMessage(): string
-    {
-        return $this->errorMessage;
     }
 
     private function isInside(int $id, int $newParent): bool
