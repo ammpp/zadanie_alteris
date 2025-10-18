@@ -4,22 +4,30 @@ namespace App\Service;
 use App\Repository\JednostkaRepository;
 use App\Entity\Jednostka;
 use Doctrine\Common\Collections\Criteria;
+use App\Repository\MaterialRepository;
 
-class JednostkaService
+class JednostkaService extends AbstractService
 {
     private JednostkaRepository $jednostkaRepository;
-    private string $errorMessage = '';
+    private MaterialRepository $materialRepository;
 
     public function __construct
     (
-        JednostkaRepository $jednostkaRepository
+        JednostkaRepository $jednostkaRepository,
+        MaterialRepository $materialRepository
     ) {
         $this->jednostkaRepository = $jednostkaRepository;
+        $this->materialRepository = $materialRepository;
     }
 
     public function getJednostki(?int $limit = 100, ?int $offset = 0)
     {
         return $this->jednostkaRepository->findBy([], ['nazwa' => 'ASC'], $limit, $offset);
+    }
+
+    public function getJednostka(int $id): ?Jednostka
+    {
+        return $this->jednostkaRepository->find($id);
     }
 
     public function createJednostka(
@@ -86,17 +94,18 @@ class JednostkaService
     {
         $jednostka = $this->jednostkaRepository->find($id);
 
+        if ($this->materialRepository->count(['jednostka' => $jednostka])) {
+            $this->errorMessage = 'Jednostka jest uzywana';
+            return false;
+        }
+
         if ($jednostka) {
             $this->jednostkaRepository->remove($jednostka);
             return true;
         }
 
+        $this->errorMessage = 'Jednostka nie istnieje';
         return false;
-    }
-
-    public function getErrorMessage(): string
-    {
-        return $this->errorMessage;
     }
 
     private function checkExists(
